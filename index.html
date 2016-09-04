@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>pkmn_notifier</title>
+  </head>
+  <body>
+    <form id="scanning_setup">
+      Gmail account: <input type="text" id="username"><br>
+      Password: <input type="password" id="password"><br>
+      Latitude<input type="number" id="latitude" step="0.000001">
+      Longitude<input type="number" id="longitude" step="0.000001">
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+
+  <script>
+    const $ = require('jquery')
+    let scanner = require('./scanner.js')
+
+    $('#username').val(localStorage.getItem('username'))
+    $('#password').val(localStorage.getItem('password'))
+    if(localStorage.getItem('latitude'))
+      $('#latitude').val(localStorage.getItem('latitude'))
+    if(localStorage.getItem('longitude'))
+      $('#longitude').val(parseFloat(localStorage.getItem('longitude')))
+
+    $('#scanning_setup').submit(function( event ) {
+      event.preventDefault()
+
+      scanner.username = $('#username').val()
+      localStorage.setItem('username', scanner.username)
+
+      scanner.password = $('#password').val()
+      localStorage.setItem('password', scanner.password)
+
+      scanner.lat = parseFloat($('#latitude').val())
+      localStorage.setItem('latitude', scanner.lat)
+
+      scanner.lng = parseFloat($('#longitude').val())
+      localStorage.setItem('longitude', scanner.lng)
+
+      scanner.start_scanning()
+    })
+ </script>
+</html>
