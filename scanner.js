@@ -7,8 +7,8 @@ const bluebird = require('bluebird')
 // const Long = require('long')
 const path = require('path')
 
-const google = new pogobuf.GoogleLogin()
-const client = new pogobuf.Client()
+var google = new pogobuf.GoogleLogin()
+var client = new pogobuf.Client()
 
 var nearbyList = []
 
@@ -40,7 +40,24 @@ var start_scanning = function() {
 
     setInterval(() => {
       var cellIDs = pogobuf.Utils.getCellIDs(self.lat, self.lng)
-      return bluebird.resolve(client.getMapObjects(cellIDs, Array(cellIDs.length).fill(0))).then(mapObjects => {
+      return bluebird.resolve(client.getMapObjects(cellIDs, Array(cellIDs.length).fill(0))).catch(reason => {
+        if (~reason.toString().indexOf('code 102')){
+          console.log('status code 102, relogging...');
+
+          google = new pogobuf.GoogleLogin()
+          client = new pogobuf.Client()
+
+          // Relogin
+          google.login(self.username, self.password).then(token => {
+            client.setAuthInfo('google', token)
+            client.setPosition(self.lat, self.lng)
+            client.init()
+          }).then(() => {
+            console.log('relogged!')
+          })
+        }
+        throw reason;
+      }).then(mapObjects => {
         return mapObjects.map_cells
       }).each(cell => {
         // console.log('Cell ' + cell.s2_cell_id.toString())
@@ -68,7 +85,15 @@ var start_scanning = function() {
         })
       })
     }, 30 * 1000)
-  }).catch(console.error)
+  }).catch(function(err) {
+    console.error(err)
+    notifier.notify({
+      icon: path.join(__dirname, 'icons/app.jpg'),
+      title: 'Error',
+      message: err,
+      urgency: 'critical'
+    })
+  })
 }
 
 module.exports = {
