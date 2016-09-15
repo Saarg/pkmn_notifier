@@ -1,6 +1,6 @@
 {
   "name": "pkmn_notifier",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Desktop notifications for pokemon go",
   "author": "Saarg",
   "private": true,
