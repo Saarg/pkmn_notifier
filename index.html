@@ -3,16 +3,35 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
+    <link rel="stylesheet" href="style.css">
+
     <title>pkmn_notifier</title>
   </head>
   <body>
-    <form id="scanning_setup">
-      Gmail account: <input type="text" id="username"><br>
-      Password: <input type="password" id="password"><br>
-      Latitude<input type="number" id="latitude" step="0.000001">
-      Longitude<input type="number" id="longitude" step="0.000001">
-      <input type="submit" value="Submit">
-    </form>
+    <div class="card is-fullwidth">
+      <form id="scanning_setup">
+        <div class="card-content">
+          <div class="control">
+            <div class="columns">
+              <label class="label">Gmail account:</label><input class="column input" type="text" id="username">
+            </div>
+            <div class="columns">
+              <label class="label">Password:</label><input class="input" type="password" id="password">
+            </div>
+            <div class="columns">
+              <label class="label">Latitude:</label><input class="input" type="number" id="latitude" step="0.000001">
+            </div>
+            <div class="columns">
+              <label class="label">Longitude:</label><input class="input" type="number" id="longitude" step="0.000001">
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <input type="submit" value="Scanner" class="button is-fullwidth">
+        </div>
+      </form>
+    </div>
   </body>
 
   <script>

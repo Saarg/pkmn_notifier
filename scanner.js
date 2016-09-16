@@ -32,7 +32,7 @@ var start_scanning = function() {
   }).then(() => {
     console.log('Authenticated, waiting for first map refresh (30s)')
     notifier.notify({
-      icon: path.join(__dirname, 'icons/app.jpg'),
+      icon: path.join(__dirname, 'icons/app.png'),
       title: 'Authenticated ' + self.lat + ' ' + self.lng,
       message: 'Waiting for first map refresh (30s)',
       urgency: 'critical'
@@ -88,7 +88,7 @@ var start_scanning = function() {
   }).catch(function(err) {
     console.error(err)
     notifier.notify({
-      icon: path.join(__dirname, 'icons/app.jpg'),
+      icon: path.join(__dirname, 'icons/app.png'),
       title: 'Error',
       message: err,
       urgency: 'critical'

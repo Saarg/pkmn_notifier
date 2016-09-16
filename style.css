@@ -1,0 +1,32 @@
+html, body {
+  overflow: hidden;
+}
+
+html, body, .card {
+  background-color: #4573bb;
+}
+
+label {
+  float: left !important;
+  color: white !important;
+}
+
+input {
+  float: right !important;
+  width: inherit !important;
+  background-color: #75a3eb !important;
+}
+
+label {
+  height: 20px !important;
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+.card-content {
+  height: 160px !important;
+}
+
+.card-footer input {
+  width: 100% !important;
+}
