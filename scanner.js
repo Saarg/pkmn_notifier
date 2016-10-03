@@ -1,5 +1,6 @@
 'use strict'
 
+const {ipcRenderer} = require('electron')
 const notifier = require('node-notifier')
 const pogobuf = require('pogobuf')
 const POGOProtos = require('node-pogo-protos')
@@ -77,9 +78,12 @@ var start_scanning = function() {
               urgency: 'critical'
             })
 
-            nearbyList.push(catchablePokemon.pokemon_id)
+            nearbyList.push(pogobuf.Utils.getEnumKeyByValue(POGOProtos.Enums.PokemonId, catchablePokemon.pokemon_id))
+
+            ipcRenderer.send('UpdateList', nearbyList)
             setTimeout(function () {
-              nearbyList.splice(nearbyList.indexOf(catchablePokemon.pokemon_id), 1)
+              nearbyList.splice(nearbyList.indexOf(pogobuf.Utils.getEnumKeyByValue(POGOProtos.Enums.PokemonId, catchablePokemon.pokemon_id)), 1)
+              ipcRenderer.send('UpdateList', nearbyList)
             }, 20 * 60000)
           }
         })
