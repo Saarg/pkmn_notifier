@@ -1,13 +1,13 @@
 {
   "name": "pkmn_notifier",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Desktop notifications for pokemon go",
   "author": "Saarg",
   "private": true,
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . pkmn_notifier --all"
+    "build": "electron-packager . pkmn_notifier --icon icons/app.png --all --overwrite"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
