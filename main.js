@@ -1,6 +1,8 @@
 'use strict'
 
 const electron = require('electron')
+const pogobuf = require('pogobuf')
+const POGOProtos = require('node-pogo-protos')
 const app = electron.app
 const Menu = electron.Menu
 const Tray = electron.Tray
@@ -47,8 +49,8 @@ app.on('activate', function () {
 ipcMain.on('UpdateList', (event, nearbyList) => {
   if(nearbyList.length > 0) {
     spawnList = []
-    for (var pkmn_name of nearbyList) {
-      spawnList.push({label: pkmn_name})
+    for (var pkmn_id of nearbyList) {
+      spawnList.push({label: pogobuf.Utils.getEnumKeyByValue(POGOProtos.Enums.PokemonId, pkmn_id)})
     }
   } else {
     spawnList = [{label: 'Pkmn list empty'}]
