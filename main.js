@@ -30,6 +30,10 @@ let bottomTray = [
       if(scanner.username != '' && scanner.password != '' &&
         scanner.lat != 0.0 && scanner.lng != 0.0) {
         scanner.start_scanning(UpdateList)
+
+        bottomTray.pop()
+        const contextMenu = Menu.buildFromTemplate(spawnList.concat(bottomTray))
+        tray.setContextMenu(contextMenu)
       } else if (mainWindow)
         mainWindow.show()
     }
@@ -57,12 +61,6 @@ function createWindow () {
 }
 
 app.on('ready', createWindow)
-
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
 
 app.on('activate', function () {
   if (mainWindow === null) {
@@ -99,5 +97,9 @@ ipcMain.on('ScannerReady', (event, s) => {
   if(scanner.username != '' && scanner.password != '' &&
     scanner.lat != 0.0 && scanner.lng != 0.0) {
     scanner.start_scanning(UpdateList)
+
+    bottomTray.pop()
+    const contextMenu = Menu.buildFromTemplate(spawnList.concat(bottomTray))
+    tray.setContextMenu(contextMenu)
   }
 })
