@@ -46,7 +46,7 @@ function createWindow () {
   tray.setToolTip('pkmn_notifier')
   tray.setContextMenu(contextMenu)
 
-  mainWindow = new BrowserWindow({icon:'icons/app.png', width: 300, height: 210})
+  mainWindow = new BrowserWindow({icon: path.join(__dirname, 'icons/app.png'), width: 300, height: 210})
 
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
