@@ -1,6 +1,7 @@
 'use strict'
 
 const electron = require('electron')
+const path = require('path')
 const pogobuf = require('pogobuf')
 const POGOProtos = require('node-pogo-protos')
 const app = electron.app
@@ -73,7 +74,13 @@ function UpdateList (nearbyList) {
   if(nearbyList.length > 0) {
     spawnList = []
     for (var pkmn_id of nearbyList) {
-      spawnList.push({label: pogobuf.Utils.getEnumKeyByValue(POGOProtos.Enums.PokemonId, pkmn_id)})
+      var icon =  '' + pkmn_id
+      var pad = '000'
+
+      spawnList.push({
+        icon: path.join(__dirname, 'icons', pad.substring(0, pad.length - icon.length) + icon + '.png'),
+        label: pogobuf.Utils.getEnumKeyByValue(POGOProtos.Enums.PokemonId, pkmn_id)
+      })
     }
   } else {
     spawnList = [{label: 'Pkmn list empty'}]
