@@ -36,14 +36,35 @@
 
   <script>
     const $ = require('jquery')
-    let scanner = require('./scanner.js')
+    const {ipcRenderer} = require('electron')
+    let scanner = {
+      'username': '',
+      'password': '',
+      'lat': 0.0,
+      'lng': 0.0,
+    }
 
+    if(localStorage.getItem('username')) {
     $('#username').val(localStorage.getItem('username'))
-    $('#password').val(localStorage.getItem('password'))
-    if(localStorage.getItem('latitude'))
-      $('#latitude').val(localStorage.getItem('latitude'))
-    if(localStorage.getItem('longitude'))
+    scanner.username = localStorage.getItem('username')
+    }
+
+    if(localStorage.getItem('password')) {
+      $('#password').val(localStorage.getItem('password'))
+      scanner.password = localStorage.getItem('password')
+    }
+
+    if(localStorage.getItem('latitude')) {
+      $('#latitude').val(parseFloat(localStorage.getItem('latitude')))
+      scanner.lat = localStorage.getItem('latitude')
+    }
+
+    if(localStorage.getItem('longitude')) {
       $('#longitude').val(parseFloat(localStorage.getItem('longitude')))
+      scanner.lng = localStorage.getItem('longitude')
+    }
+
+    ipcRenderer.send('ScannerReady', scanner)
 
     $('#scanning_setup').submit(function( event ) {
       event.preventDefault()
@@ -60,7 +81,7 @@
       scanner.lng = parseFloat($('#longitude').val())
       localStorage.setItem('longitude', scanner.lng)
 
-      scanner.start_scanning()
+      ipcRenderer.send('ScannerReady', scanner)
     })
  </script>
 </html>

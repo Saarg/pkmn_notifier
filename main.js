@@ -9,14 +9,35 @@ const Tray = electron.Tray
 const ipcMain = electron.ipcMain
 const BrowserWindow = electron.BrowserWindow
 
+let scanner = require('./scanner')
+
 let mainWindow = null
 let tray = null
 
 let spawnList = [{label: 'Pkmn list empty'}]
+let bottomTray = [
+  {type: 'separator'},
+  {
+    label: 'Open window',
+    click (item, focusedWindow) {
+      if (mainWindow) mainWindow.show()
+    }
+  },
+  {
+    label: 'Start scanning',
+    click (item, focusedWindow) {
+      if(scanner.username != '' && scanner.password != '' &&
+        scanner.lat != 0.0 && scanner.lng != 0.0) {
+        scanner.start_scanning(UpdateList)
+      } else if (mainWindow)
+        mainWindow.show()
+    }
+  }
+]
 
 function createWindow () {
   tray = new Tray(__dirname+'/icons/app.png')
-  const contextMenu = Menu.buildFromTemplate(spawnList)
+  const contextMenu = Menu.buildFromTemplate(spawnList.concat(bottomTray))
   tray.setToolTip('pkmn_notifier')
   tray.setContextMenu(contextMenu)
 
@@ -30,6 +51,8 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null
   })
+
+  mainWindow.hide()
 }
 
 app.on('ready', createWindow)
@@ -46,7 +69,7 @@ app.on('activate', function () {
   }
 })
 
-ipcMain.on('UpdateList', (event, nearbyList) => {
+function UpdateList (nearbyList) {
   if(nearbyList.length > 0) {
     spawnList = []
     for (var pkmn_id of nearbyList) {
@@ -56,6 +79,18 @@ ipcMain.on('UpdateList', (event, nearbyList) => {
     spawnList = [{label: 'Pkmn list empty'}]
   }
 
-  const contextMenu = Menu.buildFromTemplate(spawnList)
+  const contextMenu = Menu.buildFromTemplate(spawnList.concat(bottomTray))
   tray.setContextMenu(contextMenu)
+}
+
+ipcMain.on('ScannerReady', (event, s) => {
+  scanner.username = s.username
+  scanner.password = s.password
+  scanner.lat = parseFloat(s.lat)
+  scanner.lng = parseFloat(s.lng)
+
+  if(scanner.username != '' && scanner.password != '' &&
+    scanner.lat != 0.0 && scanner.lng != 0.0) {
+    scanner.start_scanning(UpdateList)
+  }
 })

@@ -13,19 +13,10 @@ var client = new pogobuf.Client()
 
 var nearbyList = []
 
-var start_scanning = function() {
+var start_scanning = function(callback) {
   console.log(this.username)
   let self = this
   // Login ===================================================================
-  google.login(self.username, self.password).then(token => {
-    client.setAuthInfo('google', token)
-    client.setPosition(self.lat, self.lng)
-    return client.init()
-  }).then(() => {
-    console.log('Bad first HOTFIX')
-  })
-
-  // FIXME BAD BAD HOTFIX
   google.login(self.username, self.password).then(token => {
     client.setAuthInfo('google', token)
     client.setPosition(self.lat, self.lng)
@@ -80,10 +71,10 @@ var start_scanning = function() {
 
             nearbyList.push(catchablePokemon.pokemon_id)
 
-            ipcRenderer.send('UpdateList', nearbyList)
+            callback(nearbyList)
             setTimeout(function () {
               nearbyList.splice(nearbyList.indexOf(catchablePokemon.pokemon_id), 1)
-              ipcRenderer.send('UpdateList', nearbyList)
+              callback(nearbyList)
             }, 20 * 60000)
           }
         })
